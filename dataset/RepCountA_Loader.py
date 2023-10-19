@@ -25,8 +25,8 @@ class MyData(Dataset):
         :param label_path: label child path(.csv)
         """
         self.root_path = root_path
-        self.video_path = os.path.join(self.root_path, 'video', video_path)  # train or valid
-        self.label_path = os.path.join(self.root_path, 'npz', label_path)
+        self.video_path = os.path.join(self.root_path, 'npz', video_path)  # train or valid
+        self.label_path = os.path.join(self.root_path, 'annotation', label_path)
         self.video_dir = os.listdir(self.video_path)
         self.label_dict = get_labels_dict(self.label_path)  # get all labels
         self.num_frame = num_frame

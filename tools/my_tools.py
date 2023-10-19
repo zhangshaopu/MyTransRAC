@@ -50,7 +50,7 @@ def paint_smi_matrixs(matrixs, index=0):
     plt.clf()
     b, c, w, h = matrixs.shape
     for i in range(c):
-        matrix = matrixs[0, i, :, :].detach().cpu().numpy()
+        matrix = matrixs[0, i, :, :].detach().cpu().numpy() # (64,64)
         plt.imshow(matrix)
         plt.colorbar()
         dir = 'graph/matrixs{0}'.format(index)
@@ -72,9 +72,9 @@ def plot_inference(precount, count):
 def density_map(maps, count, index, file_name):
     # paint density map
     plt.clf()
-    map = maps.detach().cpu().numpy().reshape(1, 64)
+    map = maps.detach().cpu().numpy().reshape(1, 64) # [1,64]
     sns.set()
-    fig = plt.figure(figsize=(64, 4))
+    fig = plt.figure(figsize=(64, 4)) # 幕布长64 宽 4
     sns_plot = sns.heatmap(map, xticklabels=False, cbar=False, cmap='Greens')
     plt.savefig(fname="density_map/{0}_{1}.png".format(file_name, index), dpi=500)
     plt.close()

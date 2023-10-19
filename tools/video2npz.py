@@ -137,6 +137,7 @@ class MyDataset(Dataset):
                 return -1
             # npy_pth = r'/p300/LSP_npz/npy_data/' + os.path.splitext(filename)[0]
             npy_pth = npy_dir + os.path.splitext(filename)[0]
+            #  npz 文件中将包含两个变量：一个名为 "imgs" 的变量，其值为帧数组 frames；一个名为 "fps" 的变量，其值为原始帧数 original_frames_length。
             np.savez(npy_pth, imgs=frames, fps=original_frames_length)  # [f,c,h,w]
         except:
             print('error: ', video_filename, ' cannot open')
@@ -149,18 +150,18 @@ class MyDataset(Dataset):
         :return: target number of frames
         """
         frames_adjust = []
-        frame_length = len(frames)
-        if self.num_frames <= len(frames):
-            for i in range(1, self.num_frames + 1):
+        frame_length = len(frames) 
+        if self.num_frames <= len(frames): # 检查目标帧数是否小于等于原始帧数
+            for i in range(1, self.num_frames + 1): # 用于按比例从原始帧中选择特定的帧
                 frame = frames[i * frame_length // self.num_frames - 1]
                 frames_adjust.append(frame)
-        else:
-            for i in range(frame_length):
+        else: # 如果目标帧数大于原始帧数
+            for i in range(frame_length): # 将原始帧添加到 frames_adjust 列表中
                 frame = frames[i]
                 frames_adjust.append(frame)
-            for _ in range(self.num_frames - frame_length):
+            for _ in range(self.num_frames - frame_length): # 
                 if len(frames) > 0:
-                    frame = frames[-1]
+                    frame = frames[-1] # 选择最后一帧，并将该帧添加到 frames_adjust 列表中
                     frames_adjust.append(frame)
         return frames_adjust  # [f,h,w,3]
 

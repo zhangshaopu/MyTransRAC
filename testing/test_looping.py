@@ -1,6 +1,8 @@
 """ test of TransRAC """
 import os
 import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
@@ -36,11 +38,20 @@ def test_loop(n_epochs, model, test_set, inference=True, batch_size=1, lastckpt=
                     acc = 0
                     input = input.to(device)
                     count = torch.sum(target, dim=1).round().to(device)
-                    output, sim_matrix = model(input)
+                    output, sim_matrix = model(input) # output(1,64) sim_matrix[1,12,64,64]
+
+
+                    paint_smi_matrixs(sim_matrix) # sim_matrix.shape = 
+                    
                     predict_count = torch.sum(output, dim=1).round()
+
+                    plot_inference(predict_count , count)
 
                     mae = torch.sum(torch.div(torch.abs(predict_count - count), count + 1e-1)) / \
                           predict_count.flatten().shape[0]  # mae
+
+                    # if predict_count.item() == count.item() and MAE < 0.2:
+                    density_map(output, count.item(), batch_idx,batch_idx)
 
                     gaps = torch.sub(predict_count, count).reshape(-1).cpu().detach().numpy().reshape(-1).tolist()
                     for item in gaps:
