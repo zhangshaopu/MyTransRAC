@@ -40,7 +40,9 @@ class MyData(Dataset):
         video_tensor, video_frame_length = get_frames(file_path)  # [64, 3, 224, 224]
         video_tensor = video_tensor.transpose(0, 1)  # [64, 3, 224, 224] -> [ 3, 64, 224, 224]
         if video_file_name in self.label_dict.keys():
+            # 
             time_points = self.label_dict[video_file_name]
+            # 
             label = preprocess(video_frame_length, time_points, num_frames=self.num_frame)
             label = torch.tensor(label)
             return [video_tensor, label]
@@ -91,12 +93,15 @@ def preprocess(video_frame_length, time_points, num_frames):
     """
     new_crop = []
     for i in range(len(time_points)):  # frame_length -> 64
+        """
+        计算裁剪视频帧的索引。将时间点除以视频帧长度，乘以目标帧数，并向上取整，最后限制在 [0, num_frames-1] 的范围内
+        """
         item = min(math.ceil((float((time_points[i])) / float(video_frame_length)) * num_frames), num_frames - 1)
         new_crop.append(item)
     new_crop = np.sort(new_crop)
-    label = normalize_label(new_crop, num_frames)
+    label = normalize_label(new_crop, num_frames) 
 
-    return label
+    return label # 返回标准化后的裁剪索引列表作为结果
 
 
 def check_file_exist(filename, msg_tmpl='file "{}" does not exist'):

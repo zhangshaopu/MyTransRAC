@@ -78,7 +78,7 @@ def train_loop(n_epochs, model, train_set, valid_set, train=True, valid=True, in
                     output, matrixs = model(input)
                     predict_count = torch.sum(output, dim=1).type(torch.FloatTensor).to(device)
                     predict_density = output
-                    loss1 = lossMSE(predict_density, density)
+                    loss1 = lossMSE(predict_density, density) # target 和 
                     loss2 = lossSL1(predict_count, count)
                     # loss2 = lossMSE(predict_count, count)
                     loss3 = torch.sum(torch.div(torch.abs(predict_count - count), count + 1e-1)) / \

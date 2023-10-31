@@ -53,6 +53,8 @@ class MyDataset(Dataset):
             self.video_dir = os.path.join(self.root_dir, 'video',r'train')
         elif method == 'valid':
             self.video_dir = os.path.join(self.root_dir,'video', r'valid')
+        elif method == 'myvalid':
+            self.video_dir = os.path.join(self.root_dir,'video', r'myvalid')
         elif method == 'test':
             self.video_dir = os.path.join(self.root_dir, 'video',r'test')
         else:
@@ -168,7 +170,7 @@ class MyDataset(Dataset):
 
 if __name__ == '__main__':
     data_root = r'/root/autodl-tmp/LLSP'
-    tag = ['train', 'valid', 'test']
+    tag = ['train']
     npy_dir = r'/root/autodl-tmp/LLSP/npz'
     for _ in range(3):
         mod = tag[_]
